@@ -16,10 +16,15 @@ app.get('/location', (request, response) => {
   response.send(locationData);
 });
 
+// app.get('/testing', (request, response) => {
+//   response.json('Hit the /testing route!');
+// });
+
 app.listen(PORT, () => console.log(`Listening on ${PORT}`));
 
+
 function searchToLatLong(query) {
-  const geoData = require('./data/geo.json');
+  const geoData = require('./geo.json');
   const location = new Location(geoData);
   location.search_query = query;
   console.log(location);
