@@ -9,6 +9,7 @@ const app = express();
 
 const PORT = process.env.PORT;
 let latlong = [];
+let weatherArr = [];
 
 app.use(cors());
 
@@ -22,9 +23,6 @@ app.get('/weather', (request, response) =>{
   response.send(weatherData);
 });
 
-// app.get('/testing', (request, response) => {
-//   response.json('Hit the /testing route!');
-// });
 
 app.listen(PORT, () => console.log(`Listening on ${PORT}`));
 
@@ -38,13 +36,11 @@ function searchToLatLong(query) {
   return location;
 }
 function searchWeather(query){
-  const weaData = require ('./darksky.json');
+  const weaData = require('./darksky.json');
 
-  const weather = new Weather(weaData);
-  // const latlong = searchToLatLong(query);
-  // console.log(location);
-  console.log(weather);
-  return weather;
+  const weatherObj = new Weather(weaData);
+  weatherObj.search_query = query;
+  return weatherObj;
 }
 
 function Location (data) {
@@ -54,22 +50,31 @@ function Location (data) {
   latlong= [this.latitude, this.longitude];
 
 }
-function Weather (data){
-  console.log(data.longitude);
-  console.log(latlong[1]);
+function Weather(data){
+ 
+  let arr = [];
 
   if (data.latitude === latlong[0] && data.longitude === latlong[1]  ){
 
-    this.forcast = data.daily.data[0].summary;
-    let timeObj =data.daily.data[0].time;
+  for (let i=0; i< data.daily.data.length; i++){
+
+    let dayForecast = data.daily.data[i].summary;
+    let timeObj =data.daily.data[i].time;
     let unixTime = new Date(timeObj *1000);
     let date = unixTime.getDate();
     let day = convertDay(unixTime.getDay());
     let year = unixTime.getFullYear();
     let month = convertMonth(unixTime.getMonth());
-    this.time = `${day} ${month} ${date} ${year}`;
-  }else console.log('ERROR');
-}
+    let readTime = `${day} ${month} ${date} ${year}`;
+
+    let weatherData = {time: readTime, forecast: dayForecast};
+    arr.push(weatherData);
+    console.log(weatherData);
+  }
+  return arr;
+
+   }else console.log('ERROR');
+ }
 
 function convertDay (d) {
   let weekday = ['Sunday','Monday','Tuesdsay','Wednesday','Thursday','Friday','Saturday'];
