@@ -1,6 +1,6 @@
 # lab-06-back-end
 
-**Author**: Your Name Goes Here
+**Author**: Tim Schoen, Jessica Roland, Chris Merritt
 **Version**: 1.0.0 (increment the patch/fix version number if you make more commits past your first submission)
 
 ## Overview
@@ -20,11 +20,21 @@
 ## Credits and Collaborations
 <!-- Give credit (and a link) to other people or resources that helped you build this application. -->
 
-Number and name of feature: 
+Number and name of feature: Feature 1- Location
 
-Estimate of time needed to complete: 
+Estimate of time needed to complete:  1hr
 
-Start time: 
+Start time: 9:20
+
+Finish time: 10:05
+
+Actual time needed to complete:45 min
+
+Number and name of feature: Feature 2 - Weather
+
+Estimate of time needed to complete: 1 hr
+
+Start time: 10:25
 
 Finish time: 
 
