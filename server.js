@@ -24,7 +24,7 @@ app.get('/weather', (request, response) =>{
 });
 
 
-app.listen(PORT, () => console.log(`Listening on ${PORT}`));
+app.listen(PORT, () => console.log(`Listening on ${PORT}`)); 
 
 
 function searchToLatLong(query) {
@@ -43,7 +43,7 @@ function searchWeather(query){
   return weatherObj;
 }
 
-function Location (data) {
+function Location (data)  {
   this.formatted_query = data.results[0].formatted_address;
   this.latitude = data.results[0].geometry.location.lat;
   this.longitude = data.results[0].geometry.location.lng;
