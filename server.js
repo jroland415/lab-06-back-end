@@ -9,7 +9,6 @@ const app = express();
 
 const PORT = process.env.PORT;
 let latlong = [];
-let weatherArr = [];
 
 app.use(cors());
 
@@ -24,21 +23,18 @@ app.get('/weather', (request, response) =>{
 });
 
 
-app.listen(PORT, () => console.log(`Listening on ${PORT}`)); 
+app.listen(PORT, () => console.log(`Listening on ${PORT}`));
 
 
 function searchToLatLong(query) {
   const geoData = require('./geo.json');
   const location = new Location(geoData);
   location.search_query = query;
-  // console.log(location);
-
   return location;
 }
 function searchWeather(query){
-  const weaData = require('./darksky.json');
-
-  const weatherObj = new Weather(weaData);
+  const weatherData = require('./darksky.json');
+  const weatherObj = new Weather(weatherData);
   weatherObj.search_query = query;
   return weatherObj;
 }
@@ -51,30 +47,28 @@ function Location (data)  {
 
 }
 function Weather(data){
- 
-  let arr = [];
 
-  if (data.latitude === latlong[0] && data.longitude === latlong[1]  ){
+  let weatherArr = [];
 
-  for (let i=0; i< data.daily.data.length; i++){
+  if (data.latitude === latlong[0] && data.longitude === latlong[1]){
 
-    let dayForecast = data.daily.data[i].summary;
-    let timeObj =data.daily.data[i].time;
-    let unixTime = new Date(timeObj *1000);
-    let date = unixTime.getDate();
-    let day = convertDay(unixTime.getDay());
-    let year = unixTime.getFullYear();
-    let month = convertMonth(unixTime.getMonth());
-    let readTime = `${day} ${month} ${date} ${year}`;
+    for (let i = 0; i < data.daily.data.length; i++){
 
-    let weatherData = {time: readTime, forecast: dayForecast};
-    arr.push(weatherData);
-    console.log(weatherData);
-  }
-  return arr;
+      let dayForecast = data.daily.data[i].summary;
+      let timeObj =data.daily.data[i].time;
+      let unixTime = new Date(timeObj *1000);
+      let date = unixTime.getDate();
+      let day = convertDay(unixTime.getDay());
+      let year = unixTime.getFullYear();
+      let month = convertMonth(unixTime.getMonth());
+      let readTime = `${day} ${month} ${date} ${year}`;
+      let weatherData = {time: readTime, forecast: dayForecast};
+      weatherArr.push(weatherData);
+    }
+    return weatherArr;
 
-   }else console.log('ERROR');
- }
+  } else console.log('ERROR');
+}
 
 function convertDay (d) {
   let weekday = ['Sunday','Monday','Tuesdsay','Wednesday','Thursday','Friday','Saturday'];
