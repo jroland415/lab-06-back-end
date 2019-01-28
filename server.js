@@ -25,6 +25,10 @@ app.get('/weather', (request, response) =>{
 
 app.listen(PORT, () => console.log(`Listening on ${PORT}`));
 
+function handleError(err, res) {
+  console.error(err);
+  if (res) res.status(500).send('There was a problem processing your request.');
+}
 
 function searchToLatLong(query) {
   const geoData = require('./geo.json');
@@ -54,27 +58,28 @@ function Weather(data){
 
     for (let i = 0; i < data.daily.data.length; i++){
 
-      let dayForecast = data.daily.data[i].summary;
-      let timeObj =data.daily.data[i].time;
-      let unixTime = new Date(timeObj *1000);
-      let date = unixTime.getDate();
-      let day = convertDay(unixTime.getDay());
-      let year = unixTime.getFullYear();
-      let month = convertMonth(unixTime.getMonth());
-      let readTime = `${day} ${month} ${date} ${year}`;
-      let weatherData = {time: readTime, forecast: dayForecast};
-      weatherArr.push(weatherData);
+      this.dayForecast = data.daily.data[i].summary;
+      this.time = new Date(data.daily.data[i].time * 1000).toLocaleDateString('en-US', {weekday: 'short', year: 'numeric', month: 'short', day: 'numeric'});
+      // let timeObj =data.daily.data[i].time;
+      // let unixTime = new Date(timeObj *1000);
+      // let date = unixTime.getDate();
+      // let day = convertDay(unixTime.getDay());
+      // let year = unixTime.getFullYear();
+      // let month = convertMonth(unixTime.getMonth());
+      // let readTime = `${day} ${month} ${date} ${year}`;
+      // let weatherData = {time: readTime, forecast: dayForecast};
+      weatherArr.push(this);
     }
     return weatherArr;
 
-  } else console.log('ERROR');
+  } else handleError(err, res);
 }
 
-function convertDay (d) {
-  let weekday = ['Sunday','Monday','Tuesdsay','Wednesday','Thursday','Friday','Saturday'];
-  return weekday[d];
-}
-function convertMonth (m){
-  let month = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
-  return month[m];
-}
+// function convertDay (d) {
+//   let weekday = ['Sunday','Monday','Tuesdsay','Wednesday','Thursday','Friday','Saturday'];
+//   return weekday[d];
+// }
+// function convertMonth (m){
+//   let month = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
+//   return month[m];
+// }
